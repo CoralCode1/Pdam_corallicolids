@@ -956,3 +956,50 @@ Fig1A
 ```
 ```{r}
 ggsave(filename ="/Users/ellawilson/Desktop/Results/bubble_plot.png",dpi=300)
+library(phyloseq)
+library(ggplot2)
+library(viridis)
+library(tidyr)
+library(dplyr)
+library(microbiome)
+library(ggpubr)
+library(knitr)
+
+# --- Step 1: Preprocess Phyloseq Object ---
+
+# Remove taxa with zero counts (optional but recommended)
+ps_nonzero <- prune_taxa(taxa_sums(psf_18S) > 0, psf_18S)
+
+# --- Step 2: Calculate Shannon Diversity Index ---
+
+df_shannon <- microbiome::alpha(ps_nonzero, index = "shannon")  # You can use index = "all", but large zero-inflated data may crash
+kable(head(df_shannon))
+
+# --- Step 3: Add Shannon Values to Metadata ---
+
+df_metadata <- meta(ps_nonzero) # Extract sample metadata (e.g. type, site, etc.)
+df_metadata$Shannon <- df_shannon$diversity_shannon # Add Shannon values as a new column
+kable(head(df_metadata))
+
+# --- Step 4: Define the Variable You Want to Explore ---
+
+# Replace 'VARIABLE' with your metadata column of interest
+groups_VARIABLE <- unique(df_metadata$Heat.Stress) # This grabs all unique group names (e.g. biofilm, water, sediment)
+
+# Create all pairwise combinations for statistical comparison (e.g. group A vs B, B vs C, etc.)
+pairs_VARIABLE <- combn(seq_along(groups_VARIABLE), 2, simplify = FALSE, FUN = function(i) groups_VARIABLE[i])
+print(pairs_VARIABLE)
+
+# --- Step 5: Create Boxplot with Pairwise Stats ---
+
+plot_VARIABLE <- ggboxplot(df_metadata, x = "Heat.Stress", y = "Shannon", order=c("cold", "control", "mid way", "heat"), fill = "Heat.Stress", add = "boxplot") +
+  theme_classic() +
+  scale_fill_viridis_d() +
+  stat_compare_means(comparisons = pairs_VARIABLE)  # To add p values (Adds Wilcoxon test results)
+
+# Show plot
+print(plot_VARIABLE)
+
+# Save plot
+ggsave("/Users/anthonybonacolta/Downloads/alpha.svg",plot_VARIABLE, width=5, height = 4)
+ggsave("/Users/anthonybonacolta/Downloads/alpha.pdf",plot_VARIABLE, width=5, height = 4)
