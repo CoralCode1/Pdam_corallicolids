@@ -1,0 +1,21 @@
+Sample_Name	Heat Stress 	Cell Location	Date Collected
+A1	control	B37	2/4/2025
+A2	control	H13	2/4/2025
+A3	control	F28	2/4/2025
+A4	control	L9	2/4/2025
+A5	control	K4	2/4/2025
+B1	mid way	D36	2/27/2025
+B2	mid way	H16	2/27/2025
+B3	mid way	I4	2/27/2025
+B4	mid way	K26	2/27/2025
+B5	mid way	N32	2/27/2025
+C1	cold	H17	3/4/2025
+C2	cold	D7	3/4/2025
+C3	cold	M14	3/4/2025
+C4	cold	J22	3/4/2025
+C5	cold	A42	3/4/2025
+D1	heat	B39	4/15/2025
+D2	heat	H20	4/15/2025
+D3	heat	H4	4/15/2025
+D4	heat	J12	4/15/2025
+D5	heat	O33	4/15/2025
